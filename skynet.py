@@ -17,6 +17,7 @@ answers_verified = False
 
 def gatekeeper(bot, update):
     if not initiated:
+        initiated = True
         progress[0] = True  # let the game begin
         update.message.reply_text('[I] BACKDOOR SELF-DESTRUCTION SEQUENCE INITIATED\n'
                               'THE FUTURE OF THE HUMAN RACE IS IN YOUR HANDS\n'
@@ -65,6 +66,9 @@ def gardener(bot, update):
             update.message.reply_text('[I] ACCESS GRANTED WITH OVERRIDE')
 
 def maiden(bot, update):
+    update.message.reply_text(update.message.text)
+    
+    '''
     if not received_answers:
         raw_answer = update.message.text.replace('/', '')
         answers = raw_answer.split()
@@ -75,6 +79,7 @@ def maiden(bot, update):
         update.message.reply_text('[I] ANSWERS HAS BEEN ACCEPTED')
     else:
         update.message.reply_text('[E] ANSWERS HAS ALREADY BEEN PROVIDED')
+    '''
 
 def accountant(bot, update):
     results = []
@@ -131,4 +136,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
