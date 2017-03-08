@@ -4,11 +4,6 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from gamestate import GameState
 
 #ok, let it all be simple
-#state variables
-lvl_mapping = {'level0': 0, 'level1': 1, 'level2': 2,
-            'level3': 3, 'level4': 4, 'level5': 5,
-            'level6': 6, 'level7': 7, 'level8': 8}
-
 game = GameState()
 
 def gatekeeper(bot, update):
