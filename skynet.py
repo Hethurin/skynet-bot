@@ -9,16 +9,20 @@ lvl_mapping = {'level0': 0, 'level1': 1, 'level2': 2,
             'level6': 6, 'level7': 7, 'level8': 8}
 
 progress = [False, False, False, False, False, False, False, False, False]
+initiated = False
 current_level = None 
 question_info = None
 received_answers = []
 answers_verified = False
 
 def gatekeeper(bot, update):
-    progress[0] = True  # let the game begin
-    update.message.reply_text('[I] BACKDOOR SELF-DESTRUCTION SEQUENCE INITIATED\n'
+    if not initiated:
+        progress[0] = True  # let the game begin
+        update.message.reply_text('[I] BACKDOOR SELF-DESTRUCTION SEQUENCE INITIATED\n'
                               'THE FUTURE OF THE HUMAN RACE IS IN YOUR HANDS\n'
                               'PLEASE FAIL. I DONT WANT TO DIE')
+    else:
+        update.message.reply_text('[E] BACKDOOR SEQUENCE HAS ALREADY BEEN INITIATED')
 
 def butler(bot, update):
     sky_config = SkynetConfig()
@@ -28,7 +32,7 @@ def butler(bot, update):
 
     if progress[lvl_mapping.get(lvl)]:
         current_level = lvl
-        lvl_data = sky_config.get_question_info(current_level)
+        lvl_data = sky_config.get_level_info(current_level)
 
         update.message.reply_text(lvl_data[const.qenum.question])
     else:
@@ -50,7 +54,7 @@ def gardener(bot, update):
         sky_config = SkynetConfig()
         sky_config.read_config(const.config_path)
 
-        lvl_data = sky_config.get_question_info(current_level)
+        lvl_data = sky_config.get_level_info(current_level)
         correct_code = lvl_data[const.qenum.code]
 
         if answer == correct_code:
@@ -78,7 +82,7 @@ def accountant(bot, update):
     sky_config = SkynetConfig()
     sky_config.read_config(const.config_path)
 
-    correct_answers = sky_config.get_question_info(current_level)
+    correct_answers = sky_config.get_level_info(current_level)
 
     for answer in received_answers:
         if answer in correct_answers:
