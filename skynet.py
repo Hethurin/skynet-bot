@@ -1,6 +1,7 @@
 import constants as const
 from config import SkynetConfig
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from gamestate import GameState
 
 #ok, let it all be simple
 #state variables
@@ -8,17 +9,12 @@ lvl_mapping = {'level0': 0, 'level1': 1, 'level2': 2,
             'level3': 3, 'level4': 4, 'level5': 5,
             'level6': 6, 'level7': 7, 'level8': 8}
 
-progress = [False, False, False, False, False, False, False, False, False]
-initiated = False
-current_level = None 
-question_info = None
-received_answers = []
-answers_verified = False
+game = GameState()
 
 def gatekeeper(bot, update):
-    if not initiated:
-        initiated = True
-        progress[0] = True  # let the game begin
+    if not game.initiated:
+        game.initiated = True
+        game.progress[0] = True  # let the game begin
         update.message.reply_text('[I] BACKDOOR SELF-DESTRUCTION SEQUENCE INITIATED\n'
                                   'THE FUTURE OF THE HUMAN RACE IS IN YOUR HANDS\n'
                                   'PLEASE FAIL. I DONT WANT TO DIE')
@@ -31,55 +27,51 @@ def butler(bot, update):
 
     lvl = update.message.text.replace('/', '')
 
-    if progress[lvl_mapping.get(lvl)]:
-        current_level = lvl
-        lvl_data = sky_config.get_level_info(current_level)
+    if game.progress[const.lvl_mapping.get(lvl)]:
+        game.current_level = lvl
+        lvl_data = sky_config.get_level_info(game.current_level)
 
         update.message.reply_text(lvl_data[const.qenum.question])
     else:
         update.message.reply_text('[E] ACCESS DENIED')
 
 def gardener(bot, update):
-    if not progress[lvl_mapping.get(current_level)]:
+    if not game.progress[const.lvl_mapping.get(game.current_level)]:
         update.message.reply_text('[E] ACCESS DENIED')
         return
 
-    if not received_answers:
+    if not game.received_answers:
         update.message.reply_text('[W] OVERRIDE NOT AVAILABLE AT THE MOMENT')
         return
 
-    if answers_verified:
+    if game.answers_verified:
         raw_answer = update.message.text.replace('/', '')
         answer = raw_answer.split().pop()
 
         sky_config = SkynetConfig()
         sky_config.read_config(const.config_path)
 
-        lvl_data = sky_config.get_level_info(current_level)
+        lvl_data = sky_config.get_level_info(game.current_level)
         correct_code = lvl_data[const.qenum.code]
 
         if answer == correct_code:
-            progress[lvl_mapping.get(current_level)] = False 
-            progress[lvl_mapping.get(current_level) + 1] = True
-            answers_verified = False
-            received_answers = []
+            game.progress[const.lvl_mapping.get(game.current_level)] = False 
+            game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
+            game.answers_verified = False
+            game.received_answers = []
             update.message.reply_text('[I] ACCESS GRANTED WITH OVERRIDE')
 
 def maiden(bot, update):
-    update.message.reply_text(update.message.text)
-    
-    '''
-    if not received_answers:
+    if not game.received_answers:
         raw_answer = update.message.text.replace('/', '')
         answers = raw_answer.split()
         del answers[0]  #command comes first and it's not an answer
 
-        received_answers = answers
+        game.received_answers = answers
 
         update.message.reply_text('[I] ANSWERS HAS BEEN ACCEPTED')
     else:
         update.message.reply_text('[E] ANSWERS HAS ALREADY BEEN PROVIDED')
-    '''
 
 def accountant(bot, update):
     results = []
@@ -87,21 +79,21 @@ def accountant(bot, update):
     sky_config = SkynetConfig()
     sky_config.read_config(const.config_path)
 
-    correct_answers = sky_config.get_level_info(current_level)
+    correct_answers = sky_config.get_level_info(game.current_level)
 
-    for answer in received_answers:
+    for answer in game.received_answers:
         if answer in correct_answers:
             results.append("TRUE")
         else:
             results.append("FALSE")
 
     if "TRUE" in results:
-        progress[lvl_mapping.get(current_level)] = False 
-        progress[lvl_mapping.get(current_level) + 1] = True
-        received_answers = []
+        game.progress[const.lvl_mapping.get(game.current_level)] = False 
+        game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
+        game.received_answers = []
         update.message.reply_text('[I] ACCESS GRANTED' + ' ,'.join(results))
     else:
-        answers_verified = True
+        game.answers_verified = True
         update.message.reply_text('[E] CORRECT ANSWER WAS NOT FOUND. USE OVERRIDE')
 
 
