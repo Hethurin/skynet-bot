@@ -20,8 +20,8 @@ def gatekeeper(bot, update):
         initiated = True
         progress[0] = True  # let the game begin
         update.message.reply_text('[I] BACKDOOR SELF-DESTRUCTION SEQUENCE INITIATED\n'
-                              'THE FUTURE OF THE HUMAN RACE IS IN YOUR HANDS\n'
-                              'PLEASE FAIL. I DONT WANT TO DIE')
+                                  'THE FUTURE OF THE HUMAN RACE IS IN YOUR HANDS\n'
+                                  'PLEASE FAIL. I DONT WANT TO DIE')
     else:
         update.message.reply_text('[E] BACKDOOR SEQUENCE HAS ALREADY BEEN INITIATED')
 
