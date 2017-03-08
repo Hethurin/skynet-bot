@@ -1,6 +1,6 @@
 import constants as const
 from config import SkynetConfig
-from telegram.ext import Updated, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 #ok, let it all be simple
 #state variables
@@ -108,17 +108,17 @@ def main():
     dp.add_handler(CommandHandler('init', gatekeeper))
     dp.add_handler(CommandHandler('level0', butler))
     dp.add_handler(CommandHandler('level1', butler))
-    dp.add_handler(commandhandler('level2', butler))
-    dp.add_handler(commandhandler('level3', butler))
-    dp.add_handler(commandhandler('level4', butler))
-    dp.add_handler(commandhandler('level5', butler))
-    dp.add_handler(commandhandler('level6', butler))
-    dp.add_handler(commandhandler('level7', butler))
-    dp.add_handler(commandhandler('level8', butler))
-    dp.add_handler(commandhandler('level9', butler))
-    dp.add_handler(commandhandler('answers', maiden))
-    dp.add_handler(commandhandler('evaluate', accountant))
-    dp.add_handler(commandhandler('override', gardener))
+    dp.add_handler(CommandHandler('level2', butler))
+    dp.add_handler(CommandHandler('level3', butler))
+    dp.add_handler(CommandHandler('level4', butler))
+    dp.add_handler(CommandHandler('level5', butler))
+    dp.add_handler(CommandHandler('level6', butler))
+    dp.add_handler(CommandHandler('level7', butler))
+    dp.add_handler(CommandHandler('level8', butler))
+    dp.add_handler(CommandHandler('level9', butler))
+    dp.add_handler(CommandHandler('answers', maiden))
+    dp.add_handler(CommandHandler('evaluate', accountant))
+    dp.add_handler(CommandHandler('override', gardener))
 
     dp.add_error_handler(error)
 
