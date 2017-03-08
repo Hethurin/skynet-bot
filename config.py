@@ -1,20 +1,21 @@
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import constants as const
+import sys
 
 
 class SkynetConfig:
 
     def __init__(self):
-        self.__parser = SafeConfigParser()
+        self.__parser = ConfigParser()
 
     def read_config(self, config_path):
         self.__parser.read(config_path)
     
-    def get_question_info(self, question):
-        question_type = self.__get_string(question, const.qmeta.type)
-        question = self.__get_string(question, const.qmeta.question)
-        answers = self.__get_string(question, const.qmeta.answers)
-        code = self.__get_string(questin, const.qmeta.code)
+    def get_level_info(self, level):
+        question_type = self.__get_string(level, const.qmeta.type)
+        question = self.__get_string(level, const.qmeta.question)
+        answers = self.__get_string(level, const.qmeta.answers)
+        code = self.__get_string(level, const.qmeta.code)
 
         return (question_type, question, answers, code)
     
@@ -34,7 +35,7 @@ class SkynetConfig:
         try:
             value = self.__parser.get(section, parameter)
         except:
-            print("[E] Exception on {}".format(parameter))
+            print("[E] Exception on {}".format(parameter), sys.exc_info()[0])
 
         return value
 
