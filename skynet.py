@@ -87,7 +87,7 @@ def accountant(bot, update):
         game.progress[const.lvl_mapping.get(game.current_level)] = False 
         game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
         game.received_answers = []
-        update.message.reply_text('[I] ACCESS GRANTED' + ' ,'.join(results))
+        update.message.reply_text('[I] ACCESS GRANTED' + ': ' + ','.join(results))
     else:
         game.answers_verified = True
         update.message.reply_text('[E] CORRECT ANSWER WAS NOT FOUND. USE OVERRIDE')
