@@ -96,7 +96,10 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def main():
-    updater = Updater('334569414:AAF0guYDoGebu4QdLXtkRbjJG-AFQbhPT3E')
+    with open('pid', 'r') as pidfile:
+        pid = pidfile.read().replace('\n','')
+
+    updater = Updater(pid)
 
     dp = updater.dispatcher
 
