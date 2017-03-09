@@ -74,7 +74,8 @@ def accountant(bot, update):
     sky_config = SkynetConfig()
     sky_config.read_config(const.config_path)
 
-    correct_answers = sky_config.get_level_info(game.current_level)
+    lvl_info = sky_config.get_level_info(game.current_level)
+    correct_answers = lvl_info[const.qenum.answers]
 
     for answer in game.received_answers:
         if answer in correct_answers:
@@ -96,6 +97,8 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def main():
+    pid = None
+    
     with open('pid', 'r') as pidfile:
         pid = pidfile.read().replace('\n','')
 

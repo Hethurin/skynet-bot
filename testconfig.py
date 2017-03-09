@@ -13,6 +13,15 @@ class SkynetConfigTestCase(unittest.TestCase):
 
         self.assertTupleEqual(expected_data, lvl_data)
 
+    def test_getting_question_with_multiple_correct_answers(self):
+        conf = SkynetConfig()
+        conf.read_config('testconfig.ini')
+
+        lvl_data = conf.get_level_info('level1')
+        expected_answers = 'answer1 answer18'
+
+        self.assertEqual(lvl_data[const.qenum.answers], expected_answers)
+
 if __name__ == '__main__':
     unittest.main()
 
