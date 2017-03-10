@@ -22,7 +22,8 @@ def butler(bot, update):
 
     lvl = update.message.text.replace('/', '')
 
-    if game.progress[const.lvl_mapping.get(lvl)]:
+    if game.progress[const.lvl_mapping.get(lvl)] and \
+            game.initiated:
         game.current_level = lvl
         lvl_data = sky_config.get_level_info(game.current_level)
 
@@ -31,7 +32,8 @@ def butler(bot, update):
         update.message.reply_text('[E] ACCESS DENIED')
 
 def gardener(bot, update):
-    if not game.progress[const.lvl_mapping.get(game.current_level)]:
+    if not game.progress[const.lvl_mapping.get(game.current_level)] and \
+            game.initiated:
         update.message.reply_text('[E] ACCESS DENIED')
         return
 
@@ -61,7 +63,11 @@ def maiden(bot, update):
         raw_answer = update.message.text.replace('/', '')
         answers = raw_answer.split()
         del answers[0]  #command comes first and it's not an answer
-
+        
+        if not answers:
+            update.message.reply_text('[E] NO ANSWERS PROVIDED')
+            return
+        
         game.received_answers = answers
 
         update.message.reply_text('[I] ANSWERS HAS BEEN ACCEPTED')
@@ -77,6 +83,10 @@ def accountant(bot, update):
     lvl_info = sky_config.get_level_info(game.current_level)
     correct_answers = lvl_info[const.qenum.answers]
 
+    if not game.received_answers:
+        update.message.reply_text('[W] NO ANSWERS FOUND. PLEASE SUBMIT ANSWERS')
+        return
+    
     for answer in game.received_answers:
         if answer in correct_answers:
             results.append("TRUE")
