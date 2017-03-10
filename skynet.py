@@ -59,6 +59,10 @@ def gardener(bot, update):
             update.message.reply_text('[I] ACCESS GRANTED WITH OVERRIDE')
 
 def maiden(bot, update):
+    if not game.initiated:
+        update.message.reply_text('[E] BACKDOOR SEQUENCE HAS NOT BEEN INITIALIZED'):
+        return
+    
     if not game.received_answers:
         raw_answer = update.message.text.replace('/', '')
         answers = raw_answer.split()
