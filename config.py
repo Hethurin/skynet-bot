@@ -17,6 +17,10 @@ class SkynetConfig:
         answers = self.__get_string(level, const.qmeta.answers)
         code = self.__get_string(level, const.qmeta.code)
 
+        if question_type not const.qtypes.text:
+            path = self.__get_string(level, const.qmeta.path)
+            return (question_type, question, answers, code, path)
+
         return (question_type, question, answers, code)
     
     def __get_items(self, section):

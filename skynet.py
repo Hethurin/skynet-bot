@@ -28,6 +28,10 @@ def butler(bot, update):
         lvl_data = sky_config.get_level_info(game.current_level)
 
         update.message.reply_text(lvl_data[const.qenum.question])
+
+        if lvl_data[const.qenum.type] == const.qtypes.image:
+            bot.sendPhoto(chat_id = update.message.chat_id,
+                          photo=open(lvl_data[const.qenum.path])
     else:
         update.message.reply_text('[E] ACCESS DENIED')
 
