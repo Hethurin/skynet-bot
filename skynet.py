@@ -28,7 +28,7 @@ def butler(bot, update):
         lvl_data = sky_config.get_level_info(game.current_level)
 
         if lvl_data[const.qenum.type] == const.qtypes.image:
-            update.message.reply_photo(photo=open(lvl_data[const.qenum.path]))
+            update.message.reply_photo(photo=open(lvl_data[const.qenum.path], 'rb'))
         else:
             update.message.reply_text(lvl_data[const.qenum.question])
 
