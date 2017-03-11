@@ -64,7 +64,7 @@ def gardener(bot, update):
 
 def maiden(bot, update):
     if not game.initiated:
-        update.message.reply_text('[E] BACKDOOR SEQUENCE HAS NOT BEEN INITIALIZED'):
+        update.message.reply_text('[E] BACKDOOR SEQUENCE HAS NOT BEEN INITIALIZED')
         return
     
     if not game.received_answers:
