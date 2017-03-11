@@ -17,7 +17,7 @@ class SkynetConfig:
         answers = self.__get_string(level, const.qmeta.answers)
         code = self.__get_string(level, const.qmeta.code)
 
-        if question_type not const.qtypes.text:
+        if question_type !=  const.qtypes.text:
             path = self.__get_string(level, const.qmeta.path)
             return (question_type, question, answers, code, path)
 
