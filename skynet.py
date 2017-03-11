@@ -31,7 +31,7 @@ def butler(bot, update):
 
         if lvl_data[const.qenum.type] == const.qtypes.image:
             bot.sendPhoto(chat_id = update.message.chat_id,
-                          photo=open(lvl_data[const.qenum.path])
+                          photo=open(lvl_data[const.qenum.path]))
     else:
         update.message.reply_text('[E] ACCESS DENIED')
 
