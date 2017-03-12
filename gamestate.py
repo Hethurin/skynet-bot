@@ -7,3 +7,5 @@ class GameState():
         self.received_answers = []
         self.answers_verified = False
         self.initiated = False
+        self.won = False
+        self.lost = False

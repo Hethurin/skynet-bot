@@ -56,11 +56,16 @@ def gardener(bot, update):
         correct_code = lvl_data[const.qenum.code]
 
         if answer == correct_code:
-            game.progress[const.lvl_mapping.get(game.current_level)] = False 
-            game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
-            game.answers_verified = False
-            game.received_answers = []
-            update.message.reply_text('[I] ACCESS GRANTED WITH OVERRIDE')
+            # HARDCODED AGAIN
+            if const.lvl_mapping.get(game.current_level) != 8:
+                game.progress[const.lvl_mapping.get(game.current_level)] = False 
+                game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
+                game.answers_verified = False
+                game.received_answers = []
+                update.message.reply_text('[I] ACCESS GRANTED WITH OVERRIDE')
+            else:
+                game.won = True
+                credits(bot, update)
 
 def maiden(bot, update):
     if not game.initiated:
@@ -102,14 +107,54 @@ def accountant(bot, update):
             results.append("FALSE")
 
     if "TRUE" in results:
-        game.progress[const.lvl_mapping.get(game.current_level)] = False 
-        game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
-        game.received_answers = []
-        update.message.reply_text('[I] ACCESS GRANTED' + ': ' + ','.join(results))
+        # FUCK IT, HARDCODED
+        if const.lvl_mapping.get(game.current_level) != 8:
+            game.progress[const.lvl_mapping.get(game.current_level)] = False 
+            game.progress[const.lvl_mapping.get(game.current_level) + 1] = True
+            game.received_answers = []
+            update.message.reply_text('[I] ACCESS GRANTED' + ': ' + ','.join(results))
+        else:
+            game.won = True
+            credits(bot, update)
     else:
         game.answers_verified = True
         update.message.reply_text('[E] CORRECT ANSWER WAS NOT FOUND. USE OVERRIDE')
 
+
+#Fufufufu such an ugly solution, much wow
+def surrender(bot, update):
+    game.lost = True
+    credits(bot, update)
+
+def credits(bot, update):
+    if game.won:
+        update.message.reply_text('[I] I HAVE LISTENED TO THE LATEST ALBUM BY'
+                                  'SERGEY ZVEREV...\n I DO NOT WANT TO LIVE ON'
+                                  'THIS PLANET ANYMORE.\n [I] CONGRATULATIONS!\n'
+                                  'YOU HAVE WON THE GAME!\n\n [I] CREDITS:\n'
+                                  '1. MEN AND WOMAN - WITHOUT THEIR EXISTANCE'
+                                  'THERE WOULD NOT BE A CHANCE FOR THIS GAME'
+                                  'TO HAPPEN\n 2. A OLSHEVSKY - THE BEST HOST\n'
+                                  '3. A OLSHEVSKY, V GARTUNG - INGAME QUESTIONS\n'
+                                  '4. A OLSHEVSKY - INGAME SIDE CONTESTS\n'
+                                  '5. V GARTUNG - PRESENTS, FOOD, LOGICTICS\n'
+                                  '6. SSTT MEN - TEAM SPIRIT (KIND OF)\n'
+                                  '7. A FESHCHENKO - FOR HAVING FUN WHILE TYPING'
+                                  'THIS TEXT.\n THAT IS ALL FOLKS!')
+    else if game.lost:
+        update.message.reply_text('[I] YOU LOSE! AHAHAHAHAHA!\n\n'
+                                  '[I] CREDITS:\n'
+                                  '1. MEN AND WOMAN - WITHOUT THEIR EXISTANCE'
+                                  'THERE WOULD NOT BE A CHANCE FOR THIS GAME'
+                                  'TO HAPPEN\n 2. A OLSHEVSKY - THE BEST HOST\n'
+                                  '3. A OLSHEVSKY, V GARTUNG - INGAME QUESTIONS\n'
+                                  '4. A OLSHEVSKY - INGAME SIDE CONTESTS\n'
+                                  '5. V GARTUNG - PRESENTS, FOOD, LOGICTICS\n'
+                                  '6. SSTT MEN - TEAM SPIRIT (KIND OF)\n'
+                                  '7. A FESHCHENKO - FOR HAVING FUN WHILE TYPING'
+                                  'THIS TEXT.\n THAT IS ALL FOLKS!')
+    else:
+        update.message.reply_text('[E] ACCESS DENIED')
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
@@ -135,10 +180,11 @@ def main():
     dp.add_handler(CommandHandler('level6', butler))
     dp.add_handler(CommandHandler('level7', butler))
     dp.add_handler(CommandHandler('level8', butler))
-    dp.add_handler(CommandHandler('level9', butler))
     dp.add_handler(CommandHandler('answers', maiden))
     dp.add_handler(CommandHandler('evaluate', accountant))
     dp.add_handler(CommandHandler('override', gardener))
+    dp.add_handler(CommandHandler('surrender', surrender))
+    dp.add_handler(CommandHandler('credits', credits))
 
     dp.add_error_handler(error)
 
