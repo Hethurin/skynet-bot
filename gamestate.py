@@ -8,4 +8,4 @@ class GameState():
         self.answers_verified = False
         self.initiated = False
         self.won = False
-        self.lost = False
+        self.lost = False 

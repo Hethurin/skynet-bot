@@ -11,4 +11,5 @@ lvl_mapping = {'level0': 0, 'level1': 1, 'level2': 2,
                'level6': 6, 'level7': 7, 'level8': 8}
 
 config_path = "config.ini"
+root = "vodkaonthetable"
 

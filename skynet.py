@@ -64,6 +64,7 @@ def gardener(bot, update):
                 game.received_answers = []
                 update.message.reply_text('[I] ACCESS GRANTED WITH OVERRIDE')
             else:
+                game.progress[const.lvl_mapping.get(game.current_level)] = False 
                 game.won = True
                 credits(bot, update)
 
@@ -114,6 +115,7 @@ def accountant(bot, update):
             game.received_answers = []
             update.message.reply_text('[I] ACCESS GRANTED' + ': ' + ','.join(results))
         else:
+            game.progress[const.lvl_mapping.get(game.current_level)] = False 
             game.won = True
             credits(bot, update)
     else:
@@ -128,33 +130,42 @@ def surrender(bot, update):
 
 def credits(bot, update):
     if game.won:
-        update.message.reply_text('[I] I HAVE LISTENED TO THE LATEST ALBUM BY'
-                                  'SERGEY ZVEREV...\n I DO NOT WANT TO LIVE ON'
-                                  'THIS PLANET ANYMORE.\n [I] CONGRATULATIONS!\n'
-                                  'YOU HAVE WON THE GAME!\n\n [I] CREDITS:\n'
-                                  '1. MEN AND WOMAN - WITHOUT THEIR EXISTANCE'
-                                  'THERE WOULD NOT BE A CHANCE FOR THIS GAME'
-                                  'TO HAPPEN\n 2. A OLSHEVSKY - THE BEST HOST\n'
+        update.message.reply_text('[I] I HAVE LISTENED TO THE LATEST ALBUM BY '
+                                  'SERGEY ZVEREV...\nI DO NOT WANT TO LIVE ON '
+                                  'THIS PLANET ANYMORE.\n[I] CONGRATULATIONS!\n'
+                                  'YOU HAVE WON THE GAME!\n\n[I] CREDITS:\n'
+                                  '1. MEN AND WOMAN - WITHOUT THEIR EXISTANCE '
+                                  'THERE WOULD NOT BE A CHANCE FOR THIS GAME '
+                                  'TO HAPPEN\n2. A OLSHEVSKY - THE BEST HOST\n'
                                   '3. A OLSHEVSKY, V GARTUNG - INGAME QUESTIONS\n'
                                   '4. A OLSHEVSKY - INGAME SIDE CONTESTS\n'
                                   '5. V GARTUNG - PRESENTS, FOOD, LOGICTICS\n'
                                   '6. SSTT MEN - TEAM SPIRIT (KIND OF)\n'
-                                  '7. A FESHCHENKO - FOR HAVING FUN WHILE TYPING'
-                                  'THIS TEXT.\n THAT IS ALL FOLKS!')
-    else if game.lost:
+                                  '7. A FESHCHENKO - FOR HAVING FUN WHILE TYPING '
+                                  'THIS TEXT.\nTHAT IS ALL FOLKS!')
+    elif game.lost:
         update.message.reply_text('[I] YOU LOSE! AHAHAHAHAHA!\n\n'
                                   '[I] CREDITS:\n'
-                                  '1. MEN AND WOMAN - WITHOUT THEIR EXISTANCE'
-                                  'THERE WOULD NOT BE A CHANCE FOR THIS GAME'
-                                  'TO HAPPEN\n 2. A OLSHEVSKY - THE BEST HOST\n'
+                                  '1. MEN AND WOMAN - WITHOUT THEIR EXISTANCE '
+                                  'THERE WOULD NOT BE A CHANCE FOR THIS GAME '
+                                  'TO HAPPEN\n2. A OLSHEVSKY - THE BEST HOST\n'
                                   '3. A OLSHEVSKY, V GARTUNG - INGAME QUESTIONS\n'
                                   '4. A OLSHEVSKY - INGAME SIDE CONTESTS\n'
                                   '5. V GARTUNG - PRESENTS, FOOD, LOGICTICS\n'
                                   '6. SSTT MEN - TEAM SPIRIT (KIND OF)\n'
-                                  '7. A FESHCHENKO - FOR HAVING FUN WHILE TYPING'
-                                  'THIS TEXT.\n THAT IS ALL FOLKS!')
+                                  '7. A FESHCHENKO - FOR HAVING FUN WHILE TYPING '
+                                  'THIS TEXT.\nTHAT IS ALL FOLKS!')
     else:
         update.message.reply_text('[E] ACCESS DENIED')
+
+def reset(bot, update):
+    command  = update.message.text.replace('/', '')
+    commands = command.split()
+    
+    if const.root == commands[1]:
+       game = GameState()
+    else:
+       update.message.reply_text('[E] ACCESS DENIED')
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
@@ -185,6 +196,7 @@ def main():
     dp.add_handler(CommandHandler('override', gardener))
     dp.add_handler(CommandHandler('surrender', surrender))
     dp.add_handler(CommandHandler('credits', credits))
+    dp.add_handler(CommandHandler('reset', reset))
 
     dp.add_error_handler(error)
 
